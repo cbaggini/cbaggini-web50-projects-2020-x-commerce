@@ -1,0 +1,26 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    {{bids}}
+    {% if user.is_authenticated %}
+    <div>
+        <a href="{% url 'new' %}"><button class="btn btn-primary my-3">Create new listing</button></a>
+    </div>    
+    {% endif %}
+    <h2>Active Listings</h2>
+    {% for listing in listings %}
+    <div class="border border-dark my-3 rounded-lg d-flex flex-row">
+        <div class="p-4">
+            <a href = "listing/{{ listing.pk }}"><h3>{{ listing.title }}</h3></a>
+            <p>{{listing.description}}</p>
+            <p><strong>Price:</strong> £{{ listing.current_price }}</p>
+            <p>Created on {{listing.posted_date}}</p>
+        </div>
+        <div class="img_cont">
+            {% if listing.imageURL %}
+            <img src = "{{ listing.imageURL}}" alt="listing image" class="img-responsive"> 
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+{% endblock %}

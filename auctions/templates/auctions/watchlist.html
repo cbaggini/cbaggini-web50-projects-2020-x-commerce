@@ -1,0 +1,24 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    {% if user.is_authenticated %}
+    <h2>Items I'm watching</h2>
+    {% for listing in watchlist %}
+    <div class="border border-dark my-3 rounded-lg d-flex flex-row">
+        <div class="p-4">
+            <a href = "listing/{{ listing.pk }}"><h3>{{ listing.title }}</h3></a>
+            <p>{{listing.description}}</p>
+            <p><strong>Price:</strong> £{{ listing.current_price }}</p>
+            <p>Created on {{listing.posted_date}}</p>
+        </div>
+        <div class="img_cont">
+            {% if listing.imageURL %}
+            <img src = "{{ listing.imageURL}}" alt="listing image" class="img-responsive"> 
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    You are not logged in.
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,14 @@
+body {
+    padding: 10px;
+}
+
+.img_cont {
+    max-width: 500px;
+    height: auto;
+    margin: 0;
+}
+
+img {
+    padding: 1rem;
+    width: 100%;
+}

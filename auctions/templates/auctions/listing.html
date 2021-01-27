@@ -1,0 +1,86 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    {% if message %}
+        <div class="alert alert-warning">{{ message }}</div>
+    {% endif %}
+    <div>
+        <h2>{{ listing.title }}</h2>
+        {% if listing.imageURL %}
+        <div class = "img_cont"> 
+            <img src = "{{ listing.imageURL}}" alt="listing image"> 
+        </div>
+        {% endif %}
+        <p>{{listing.description}}</p>
+        <p><strong>Listed by:</strong> {{listing.creator}}</p>
+        <p><strong>Category:</strong> {{listing.category}}</p>
+        <p><strong>Current price:</strong> £{{ listing.current_price }}</p>
+        {% if user.is_authenticated and bid_count > 0 and winner == user %}
+            <p> {{bid_count}} bid(s) so far. You are the highest bidder. </p>
+        {% else %}
+            <p> {{ bid_count }} bid(s) so far.</p>
+        {% endif %}
+    </div>
+    <div>
+        {% if user.is_authenticated %}
+            {% if listing.is_active and listing.creator == user %}
+            <form method='POST'>
+                {% csrf_token %}
+                <button type="submit" name="close">Close auction</button>
+            </form>
+            {% elif listing.is_active %}
+                
+                <form method="post">
+                    {% csrf_token %}
+                    <table border="1">
+                    {{ form }}
+                    </table>
+                    <button class="my-3 btn-primary" type="submit" name="bid">Place Bid</button>
+                </form>
+                <form method='POST'>
+                    {% csrf_token %}
+                    {% if w %}
+                        <button class="btn-primary" type="submit" name="watch">Remove from watchlist</button>
+                    {% else %}
+                        <button class="btn-primary" type="submit" name="watch">Add to watchlist</button>
+                    {% endif %}
+                </form>
+            {% elif winner == user %}
+                You won this auction!
+            {% else %}
+                This auction is closed and you were not the highest bidder.
+            {% endif %}
+        {% endif %}
+    </div>
+    <div>   
+        {% if user.is_authenticated %}
+            <h3 class="py-3">Add a comment to this listing:</h3>
+            <form method="post">
+                {% csrf_token %}
+                <table border="1">
+                {{ cform }}
+                </table>
+                <button type="submit" class="my-3 btn-primary" name="comm">Submit comment</button>
+            </form>
+        {% endif %}
+        {% if comments %}
+            <h3>Comments:</h3>
+            {% for comment in comments %}
+                <div class="my-3 p-3 card card-white post">
+                    <div class="post-heading">
+                        <div class="float-left meta">
+                            <div > <strong>
+                                {{comment.author}} on {{comment.comment_datetime}}:</strong>
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="post-description"> 
+                        {{comment.text}}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <i>No comments yet.</i>
+        {% endif %}
+    </div>
+{% endblock %}

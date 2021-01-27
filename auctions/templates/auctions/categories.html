@@ -1,0 +1,15 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    {% if user.is_authenticated %}
+    <div>
+        <a href="{% url 'new' %}"><button class="btn btn-primary">Create new listing</button></a>
+    </div>    
+    {% endif %}
+    <h2>Active Listings by Category</h2>
+    <ul>
+    {% for c in categories %}
+            <li><a href = "category/{{ c.category }}">{{ c.category }}</a></li>
+    {% endfor %}
+    </ul>
+{% endblock %}
